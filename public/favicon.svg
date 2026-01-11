@@ -17,8 +17,7 @@
     </filter>
   </defs>
   
-  <!-- Background -->
-  <rect width="512" height="512" Rx="128" fill="#0f172a" />
+  <!-- Background Removed -->
   
   <!-- Visual Elements: Sorting Bars -->
   <g filter="url(#softGlow)" transform="translate(66, 66)">
