@@ -1,13 +1,5 @@
 import { cn } from '@/lib/utils';
 import { ProjectCategory, categories } from '@/lib/projectRegistry';
-import { Cpu, Calculator, Network, LayoutGrid } from 'lucide-react';
-
-const iconMap: Record<string, React.ReactNode> = {
-  Cpu: <Cpu className="w-4 h-4" />,
-  Calculator: <Calculator className="w-4 h-4" />,
-  Network: <Network className="w-4 h-4" />,
-  LayoutGrid: <LayoutGrid className="w-4 h-4" />,
-};
 
 interface CategoryTabsProps {
   selected: ProjectCategory | 'all';
@@ -15,34 +7,25 @@ interface CategoryTabsProps {
 }
 
 export const CategoryTabs = ({ selected, onSelect }: CategoryTabsProps) => {
-  return (
-    <div className="flex flex-wrap justify-center gap-3">
-      <button
-        onClick={() => onSelect('all')}
-        className={cn(
-          'flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300',
-          selected === 'all'
-            ? 'bg-primary text-primary-foreground glow-primary'
-            : 'glass text-muted-foreground hover:text-foreground hover:bg-secondary/80'
-        )}
-      >
-        {iconMap.LayoutGrid}
-        All Projects
-      </button>
+  const tabs: { id: ProjectCategory | 'all'; label: string }[] = [
+    { id: 'all', label: 'all' },
+    ...categories.map((c) => ({ id: c.id, label: c.label.toLowerCase() })),
+  ];
 
-      {categories.map((category) => (
+  return (
+    <div className="flex flex-wrap justify-center gap-2 font-mono text-sm">
+      {tabs.map((tab) => (
         <button
-          key={category.id}
-          onClick={() => onSelect(category.id)}
+          key={tab.id}
+          onClick={() => onSelect(tab.id)}
           className={cn(
-            'flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300',
-            selected === category.id
-              ? 'bg-primary text-primary-foreground glow-primary'
-              : 'glass text-muted-foreground hover:text-foreground hover:bg-secondary/80'
+            'px-4 py-2 rounded-md border transition-all duration-200',
+            selected === tab.id
+              ? 'border-primary bg-primary/10 text-primary'
+              : 'border-border text-muted-foreground hover:text-foreground hover:border-muted-foreground/50'
           )}
         >
-          {iconMap[category.icon]}
-          {category.label}
+          {selected === tab.id ? `[${tab.label}]` : tab.label}
         </button>
       ))}
     </div>

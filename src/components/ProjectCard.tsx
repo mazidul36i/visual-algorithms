@@ -1,31 +1,74 @@
 import { Link } from 'react-router-dom';
 import { Project } from '@/lib/projectRegistry';
 import { cn } from '@/lib/utils';
-import { ArrowRight, BarChart3, Binary, Network } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { ArrowUpRight } from 'lucide-react';
 
-const iconMap: Record<string, React.ReactNode> = {
-  BarChart3: <BarChart3 className="w-8 h-8" />,
-  Binary: <Binary className="w-8 h-8" />,
-  Network: <Network className="w-8 h-8" />,
+/* Each card carries a tiny CSS-animated preview of the actual visualization,
+   so the gallery demos itself before a single click. */
+
+const SortPreview = () => {
+  const heights = [0.35, 0.8, 0.5, 1, 0.25, 0.65, 0.45, 0.9, 0.3, 0.7, 0.55, 0.85];
+  return (
+    <div className="flex items-end gap-1.5 h-full w-full px-6 pb-5 pt-8">
+      {heights.map((h, i) => (
+        <div
+          key={i}
+          className={cn(
+            'flex-1 origin-bottom animate-sortbar rounded-[1px]',
+            i % 4 === 0 ? 'bg-accent/80' : 'bg-primary/70'
+          )}
+          style={{
+            height: '100%',
+            ['--bar-from' as string]: h,
+            ['--bar-to' as string]: 1.05 - h,
+            animationDelay: `${i * 0.18}s`,
+          }}
+        />
+      ))}
+    </div>
+  );
 };
 
-const colorMap = {
-  primary: 'from-primary/20 to-primary/5 border-primary/30 hover:border-primary/60',
-  accent: 'from-accent/20 to-accent/5 border-accent/30 hover:border-accent/60',
-  cyan: 'from-chart-3/20 to-chart-3/5 border-chart-3/30 hover:border-chart-3/60',
-};
+const PI_COLUMNS = ['3141', '5926', '5358', '9793', '2384', '6264', '3383', '2795'];
 
-const iconColorMap = {
-  primary: 'text-primary',
-  accent: 'text-accent',
-  cyan: 'text-chart-3',
-};
+const PiPreview = () => (
+  <div className="relative flex justify-between h-full w-full px-7 overflow-hidden font-mono text-sm">
+    {PI_COLUMNS.map((col, i) => (
+      <div
+        key={i}
+        className="animate-digitfall flex flex-col gap-1 text-primary/70"
+        style={{ animationDelay: `${i * 0.4}s`, animationDuration: `${2.6 + (i % 3) * 0.7}s` }}
+      >
+        {col.split('').map((d, j) => (
+          <span key={j} className={j === 0 ? 'text-accent' : undefined}>
+            {d}
+          </span>
+        ))}
+      </div>
+    ))}
+  </div>
+);
 
-const difficultyColors = {
-  beginner: 'bg-chart-1/20 text-chart-1 border-chart-1/30',
-  intermediate: 'bg-chart-4/20 text-chart-4 border-chart-4/30',
-  advanced: 'bg-chart-5/20 text-chart-5 border-chart-5/30',
+const NodesPreview = () => (
+  <div className="relative h-full w-full">
+    {[
+      { top: '30%', left: '20%' },
+      { top: '55%', left: '45%' },
+      { top: '25%', left: '65%' },
+      { top: '65%', left: '78%' },
+    ].map((pos, i) => (
+      <span
+        key={i}
+        className="absolute w-2.5 h-2.5 rounded-full bg-primary/80 animate-pulse-slow"
+        style={{ ...pos, animationDelay: `${i * 0.6}s` }}
+      />
+    ))}
+  </div>
+);
+
+const previewById: Record<string, React.ReactNode> = {
+  'sorting-visualizer': <SortPreview />,
+  'flow-of-pi': <PiPreview />,
 };
 
 interface ProjectCardProps {
@@ -37,73 +80,43 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
   return (
     <Link
       to={project.path}
-      className={cn(
-        'group relative block rounded-2xl p-6 transition-all duration-500',
-        'bg-gradient-to-br border backdrop-blur-sm',
-        'hover:scale-[1.02] hover:shadow-glow-md',
-        colorMap[project.color]
-      )}
-      style={{
-        animationDelay: `${index * 100}ms`,
-      }}
+      className="group relative block border border-border bg-card/60 rounded-lg overflow-hidden transition-all duration-300 hover:border-primary/50 hover:-translate-y-1"
+      style={{ animationDelay: `${index * 100}ms` }}
     >
-      <div className="flex flex-col h-full">
-        {/* Icon */}
-        <div
-          className={cn(
-            'w-14 h-14 rounded-xl flex items-center justify-center mb-4',
-            'bg-card/50 backdrop-blur-sm',
-            iconColorMap[project.color]
-          )}
-        >
-          {iconMap[project.icon]}
-        </div>
-
-        {/* Content */}
-        <div className="flex-1">
-          <h3 className="text-xl font-display font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-            {project.title}
-          </h3>
-          <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-            {project.description}
-          </p>
-        </div>
-
-        {/* Tags & Difficulty */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          <Badge
-            variant="outline"
-            className={cn('text-xs capitalize', difficultyColors[project.difficulty])}
-          >
-            {project.difficulty}
-          </Badge>
-          {project.tags.slice(0, 2).map((tag) => (
-            <Badge
-              key={tag}
-              variant="outline"
-              className="text-xs bg-secondary/50 text-muted-foreground border-border"
-            >
-              {tag}
-            </Badge>
-          ))}
-        </div>
-
-        {/* CTA */}
-        <div className="flex items-center text-sm font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <span>Explore</span>
-          <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-        </div>
+      {/* Live preview window */}
+      <div className="relative h-44 border-b border-border bg-background/60 overflow-hidden">
+        {previewById[project.id] ?? <NodesPreview />}
+        <span className="absolute top-3 left-4 font-mono text-[10px] tracking-widest uppercase text-muted-foreground">
+          fig. {String(index + 1).padStart(2, '0')} — {project.category.replace('-', ' ')}
+        </span>
       </div>
 
-      {/* Glow effect on hover */}
-      <div
-        className={cn(
-          'absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10',
-          project.color === 'primary' && 'glow-primary',
-          project.color === 'accent' && 'glow-accent',
-          project.color === 'cyan' && 'glow-cyan'
-        )}
-      />
+      <div className="p-6">
+        <div className="flex items-start justify-between gap-4 mb-3">
+          <h3 className="font-display text-2xl font-medium tracking-tight text-foreground group-hover:text-primary transition-colors">
+            {project.title}
+          </h3>
+          <ArrowUpRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 mt-1" />
+        </div>
+
+        <p className="text-muted-foreground text-sm leading-relaxed mb-5">
+          {project.description}
+        </p>
+
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] text-muted-foreground">
+          <span className={cn(
+            'uppercase tracking-wider',
+            project.difficulty === 'beginner' && 'text-primary',
+            project.difficulty === 'intermediate' && 'text-accent',
+            project.difficulty === 'advanced' && 'text-destructive'
+          )}>
+            ● {project.difficulty}
+          </span>
+          {project.tags.slice(0, 3).map((tag) => (
+            <span key={tag}>#{tag.toLowerCase().replace(/\s+/g, '-')}</span>
+          ))}
+        </div>
+      </div>
     </Link>
   );
 };

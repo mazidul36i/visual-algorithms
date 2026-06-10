@@ -123,8 +123,8 @@ export default {
 				'glow-lg': '0 0 50px hsl(var(--primary) / 0.5)'
 			},
 			fontFamily: {
-				sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif'],
-				display: ['Space Grotesk', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+				sans: ['Instrument Sans', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif'],
+				display: ['Fraunces', 'Georgia', 'ui-serif', 'serif'],
 				mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace']
 			}
 		}
