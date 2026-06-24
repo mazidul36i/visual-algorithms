@@ -74,8 +74,8 @@ export const Navbar = () => {
                     <ListItem href="/pi" title="Flow of Pi">
                       Experience the infinite stream of Pi.
                     </ListItem>
-                    <ListItem href="#" title="Fourier Series" titleClassName="text-muted-foreground">
-                      <span className="text-muted-foreground/60">Coming Soon: Wave visuals.</span>
+                    <ListItem href="/graphs" title="Curve Tracer">
+                      Watch functions, parametric and polar curves draw themselves.
                     </ListItem>
                     <ListItem href="#" title="Fractals" titleClassName="text-muted-foreground">
                       <span className="text-muted-foreground/60">Coming Soon: Mandelbrot set.</span>

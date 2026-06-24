@@ -49,6 +49,34 @@ const PiPreview = () => (
   </div>
 );
 
+const GraphPreview = () => (
+  <div className="flex items-center justify-center h-full w-full px-6 py-4">
+    <svg viewBox="0 0 200 100" className="w-full h-full overflow-visible" fill="none">
+      {/* grid */}
+      {[50, 100, 150].map((x) => (
+        <line key={`v${x}`} x1={x} y1={0} x2={x} y2={100} stroke="hsl(var(--border))" strokeWidth={0.75} />
+      ))}
+      {[25, 75].map((y) => (
+        <line key={`h${y}`} x1={0} y1={y} x2={200} y2={y} stroke="hsl(var(--border))" strokeWidth={0.75} />
+      ))}
+      {/* x-axis */}
+      <line x1={0} y1={50} x2={200} y2={50} stroke="hsl(var(--muted-foreground))" strokeWidth={0.75} opacity={0.4} />
+      {/* self-drawing sine curve */}
+      <path
+        d="M0,50 Q19,14 38,50 T76,50 T114,50 T152,50 T190,50"
+        stroke="hsl(var(--chart-3))"
+        strokeWidth={2}
+        strokeLinecap="round"
+        pathLength={1}
+        strokeDasharray={1}
+        className="animate-curvedraw"
+      />
+      {/* pen dot */}
+      <circle cx={190} cy={50} r={3} fill="hsl(var(--accent))" className="animate-pulse" />
+    </svg>
+  </div>
+);
+
 const NodesPreview = () => (
   <div className="relative h-full w-full">
     {[
@@ -69,6 +97,7 @@ const NodesPreview = () => (
 const previewById: Record<string, React.ReactNode> = {
   'sorting-visualizer': <SortPreview />,
   'flow-of-pi': <PiPreview />,
+  'graph-visualizer': <GraphPreview />,
 };
 
 interface ProjectCardProps {

@@ -38,6 +38,17 @@ export const projects: Project[] = [
     icon: 'Binary',
     color: 'accent',
   },
+  {
+    id: 'graph-visualizer',
+    title: 'Curve Tracer',
+    description: 'Watch equations draw themselves — from y = x to Lissajous figures, rose curves, and the butterfly curve. Or type your own f(x).',
+    category: 'mathematics',
+    tags: ['Functions', 'Parametric', 'Polar'],
+    difficulty: 'intermediate',
+    path: '/graphs',
+    icon: 'Spline',
+    color: 'cyan',
+  },
 ];
 
 export const categories: { id: ProjectCategory; label: string; icon: string }[] = [

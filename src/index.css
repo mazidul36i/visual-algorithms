@@ -235,6 +235,11 @@
   .animate-digitfall {
     animation: digitfall 3.2s linear infinite;
   }
+
+  /* Self-drawing curve for the graph card preview */
+  .animate-curvedraw {
+    animation: curvedraw 3.5s ease-in-out infinite;
+  }
 }
 
 @keyframes float {
@@ -286,6 +291,11 @@
   100% { transform: translateY(110%); opacity: 0; }
 }
 
+@keyframes curvedraw {
+  0% { stroke-dashoffset: 1; }
+  60%, 100% { stroke-dashoffset: 0; }
+}
+
 @keyframes grain-shift {
   0% { transform: translate(0, 0); }
   10% { transform: translate(-5%, -8%); }
@@ -304,7 +314,8 @@
   .grain::after,
   .animate-marquee,
   .animate-sortbar,
-  .animate-digitfall {
+  .animate-digitfall,
+  .animate-curvedraw {
     animation: none;
   }
 }
